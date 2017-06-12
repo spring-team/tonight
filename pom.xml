@@ -48,10 +48,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.sub.pop</groupId>
-            <artifactId>artist</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
