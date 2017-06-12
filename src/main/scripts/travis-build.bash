@@ -19,9 +19,17 @@ function main() {
 
     local mvn="mvn --settings .settings.xml -B -V -U -Datomist.enabled=false"
 
+    local project_version
     if [[ $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(m|rc)\.[0-9]+)?$ ]]; then
-        if ! $mvn build-helper:parse-version versions:set -DnewVersion="$TRAVIS_TAG" versions:commit; then
+        if ! mvn build-helper:parse-version versions:set -DnewVersion="$TRAVIS_TAG" versions:commit; then
             err "failed to set project version to $TRAVIS_TAG"
+            return 1
+        fi
+        project_version=$TRAVIS_TAG
+    else
+        project_version=$(mvn help:evaluate -Dexpression=project.version | grep -E '^[0-9]+\.[0-9]+\.[0-9](-([0-9]{14}|SNAPSHOT))?$' | tail -n 1)
+        if [[ $? != 0 || ! $project_version ]]; then
+            err "failed to parse project version"
             return 1
         fi
     fi
@@ -39,6 +47,28 @@ function main() {
     if [[ $TRAVIS_BRANCH == master || $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(m|rc)\.[0-9]+)?$ ]]; then
         if ! $mvn deploy -DskipTests; then
             err "maven deploy failed"
+            return 1
+        fi
+
+        if ! git config --global user.email "travis-ci@atomist.com"; then
+            err "failed to set git user email"
+            return 1
+        fi
+        if ! git config --global user.name "Travis CI"; then
+            err "failed to set git user name"
+            return 1
+        fi
+        local git_tag=$project_version+travis$TRAVIS_BUILD_NUMBER
+        if ! git tag "$git_tag" -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"; then
+            err "failed to create git tag: $git_tag"
+            return 1
+        fi
+        local remote=origin
+        if [[ $GITHUB_TOKEN ]]; then
+            remote=https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG
+        fi
+        if ! git push --quiet --tags "$remote" > /dev/null 2>&1; then
+            err "failed to push git tags"
             return 1
         fi
     fi
