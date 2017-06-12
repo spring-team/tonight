@@ -1,5 +1,7 @@
 # tonight
 
+[![Build Status](https://travis-ci.org/spring-team/tonight.svg?branch=master)](https://travis-ci.org/spring-team/tonight)
+
 This project contains my new project.
 
 ## Development
