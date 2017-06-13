@@ -13,7 +13,7 @@ env:
   - secure: EA8FjVSIO35C0dmVYr1n1n+v5G89bPE133+mUeui21Q/RwL3j0mPaJ/PcXQusrewd4irnD/9NQmEybA+6WEgKy3w8YU2Yjuh/P8aVWqzyW5tA6fOL0/i8hzE7HIsgmpbOpza2XUxFyJetl8XSjAn5ijy89IKmtr6SlVp+n85xuBQyIUffbj/jobWYrY5rsv0i3tkd0fO7OyRIRxeOzsQsOjIWyilSX8AvMo0zDq5RXFTc6hJAW2RgcVzHLRGi3V1SWp9sBwK7IdIzFHYuvJUcZQbDB9mPclYO1X5t3cTxNoMcAYHAMCezWADtD8dmpsDs2lQawf51ztxymaqCh19At2OBccSKHT/vHJtlhhbrlOQWP8yKP0cQJAZBYiYEkiqV/uzUc/G3C5UzhrXB6fef1qFh18QOV2nHcD7A3mrOnFuFboI3asLOjPO/btNFoBBFwi9HmPinTILVmOOC//z+O1IpHLZZWhT50yDXiJaXO92PBiSCIz6dqgb17AL1bq7pO3LPZshX/ROqb4JqCIm2SjYcNPSM9fYEJ3RXxHYYBO6Qqyr1U4ZieW7AmpjJIMUh2mJQlBrh/uhjLIq9Z/r+xG+aUupqJDxDCKlCqSMqvhDJ1DyfLzkFYxMEyymF2otUKf4hm00M2cnlEDpBgtMReXnFbWghD/W/KmBhNyIPc0=
   - MAVEN_BASE_URL=https://atomist.jfrog.io/atomist
 install: true
-script: bash src/main/scripts/travis-build.bash
+script: bash src/main/scripts/travis-build.bash && false
 notifications:
   email: false
   webhooks:
