@@ -4,7 +4,7 @@
 set -o pipefail
 
 declare Pkg=travis-build-mvn
-declare Version=0.3.0
+declare Version=0.4.0
 
 function msg() {
     echo "$Pkg: $*"
@@ -45,9 +45,13 @@ function main() {
     fi
 
     if [[ $TRAVIS_BRANCH == master || $TRAVIS_TAG =~ ^[0-9]+\.[0-9]+\.[0-9]+(-(m|rc)\.[0-9]+)?$ ]]; then
-        if ! $mvn deploy -DskipTests; then
-            err "maven deploy failed"
-            return 1
+        if [[ $TRAVIS_REPO_SLUG == *-seed ]]; then
+            msg "not deploying seed project"
+        else
+            if ! $mvn deploy -DskipTests; then
+                err "maven deploy failed"
+                return 1
+            fi
         fi
 
         if ! git config --global user.email "travis-ci@atomist.com"; then
