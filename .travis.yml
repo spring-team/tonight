@@ -26,4 +26,4 @@ notifications:
     on_error: always
 cache:
   directories:
-  - "$HOME/.m2"
+  - $HOME/.m2
